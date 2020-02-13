@@ -24,6 +24,12 @@ void set_floor_light();
 void set_stop_light();
 
 /**
- * @brief turns of order light if the elevator is in right floor
+ * @brief turns off order light if the elevator is in right floor
  */
 void set_order_light_off();
+
+/**
+ * @brief turns off all order lights
+ */
+
+//static void clear_all_order_lights();
