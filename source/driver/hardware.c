@@ -123,7 +123,7 @@ int hardware_read_order(int floor, HardwareOrder order_type){
     if(!hardware_legal_floor(floor, order_type)){
         return 0;
     }
-
+// skal dette være [4] 
     static const int order_bit_lookup[][3] = {
         {BUTTON_UP1, BUTTON_DOWN1, BUTTON_COMMAND1},
         {BUTTON_UP2, BUTTON_DOWN2, BUTTON_COMMAND2},
