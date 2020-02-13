@@ -27,4 +27,3 @@ void set_stop_light();
  * @brief turns of order light if the elevator is in right floor
  */
 void set_order_light_off();
-huduhieuefiuefiugiegqihqef
