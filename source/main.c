@@ -55,7 +55,7 @@ int main(){
         door_obstruction();
         set_order_light_on();
         set_order_light_off();
-        set_floor_stop(1);
+        //set_floor_stop(1);
         set_floor_light();
         set_stop_light();
     }
