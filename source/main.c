@@ -6,6 +6,7 @@
 #include "door.h"
 #include "stop.h"
 #include "queue.h"
+#include "fsm.h"
 
 static void sigint_handler(int sig){
     (void)(sig);
@@ -27,10 +28,47 @@ int main(){
     printf("Press the stop button on the elevator panel to exit\n");
 
     hardware_command_movement(HARDWARE_MOVEMENT_UP);
-    
 
 
+
+    for( int i = 0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
+        if (hardware_read_floor_sensor(i)){
+            hardware_command_movement(HARDWARE_MOVEMENT_STOP);    
+            
+        }
+    }
     while(1){
+            state_machine();
+
+            if(hardware_read_stop_signal()){
+            hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+            break;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
         if(hardware_read_stop_signal()){
             hardware_command_movement(HARDWARE_MOVEMENT_STOP);
             break;
@@ -53,6 +91,9 @@ int main(){
         if(hardware_read_floor_sensor(HARDWARE_NUMBER_OF_FLOORS - 1)){
             hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
         }
+
+
+
         door_obstruction();
         set_order_light_on();
         set_order_light_off();
@@ -68,4 +109,7 @@ int main(){
         }
 
     }
+    */
+        
+    
 }
