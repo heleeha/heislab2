@@ -5,6 +5,7 @@
 #include "lights.h"
 #include "door.h"
 #include "stop.h"
+#include "queue.h"
 
 static void sigint_handler(int sig){
     (void)(sig);
@@ -58,5 +59,11 @@ int main(){
         //set_floor_stop(1);
         set_floor_light();
         set_stop_light();
+        add_to_queue();
+        /*
+        for (int i= 0; i< len(inside_queue); i++){
+            printf(inside_queue[i]);
+        }*/
+
     }
 }

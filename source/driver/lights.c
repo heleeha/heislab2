@@ -7,7 +7,7 @@ void set_order_light_on(){
 
 	
 	for (int i=0; i < HARDWARE_NUMBER_OF_FLOORS; i++) {
-			if (hardware_read_order(i, HARDWARE_ORDER_UP)) {
+			if (hardware_read_order(i, 0)) {
 				hardware_command_order_light(i, HARDWARE_ORDER_UP, 1);
 			}
 			if (hardware_read_order(i, HARDWARE_ORDER_DOWN)) {
