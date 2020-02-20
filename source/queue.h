@@ -27,7 +27,7 @@ int down_queue[HARDWARE_NUMBER_OF_FLOORS];
  */
 int up_queue[HARDWARE_NUMBER_OF_FLOORS];
 
-int any_order();
+int order_in_queues();
 
 /**
  * @brief function which are checking if any buttons are pushed at, if so it sets the right element in the right queue to 1.
@@ -50,7 +50,7 @@ void delete_all_orders();
  * @brief function to remember the last floor the elvator was in.
  * @return returns a int with the last floor. 
  */
-int last_floor();
+int current_floor();
 
 /**
  * @brief function to check if there is any orders in a list. 
@@ -61,3 +61,5 @@ int check_and_return_floor_inside();
 int check_and_return_floor_up();
 
 int check_and_return_floor_down();
+
+void update_last_floor(int* p_last_floor);

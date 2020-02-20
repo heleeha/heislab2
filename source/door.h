@@ -21,7 +21,3 @@ clock_t get_start_time();
  * @brief sets @p start to the current clocktime.
  */
 void set_start_time();
-/**
- * @brief check if the obstruction switch is high, if so the door will stay open.
- */
-void door_obstruction();

@@ -27,9 +27,3 @@ int counting_3seconds(){
    return 1;
 
 } 
-
-void door_obstruction(){
-    while(hardware_read_obstruction_signal()) {
-        hardware_command_door_open(1);
-    }
-}
