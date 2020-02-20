@@ -8,11 +8,25 @@
 #include "queue.h"
 #include "fsm.h"
 
-State change_state =STILL;
+/*
 
-void state_machine() {
+void state_machine(State change_state) {
     switch (change_state)
     {
+    case INIT:
+        int error = hardware_init();
+        if(error != 0){
+            fprintf(stderr, "Unable to initialize hardware\n");
+            exit(1);
+        }
+        hardware_command_movement(HARDWARE_MOVEMENT_UP);
+
+        for( int i = 0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
+            if (hardware_read_floor_sensor(i)){
+                hardware_command_movement(HARDWARE_MOVEMENT_STOP);    
+            }
+        }
+        break;
     case STILL:
         hardware_command_movement(HARDWARE_MOVEMENT_STOP);
         add_to_queue();
@@ -73,4 +87,4 @@ void state_machine() {
     default:
         break;
     }
-}
+}*/

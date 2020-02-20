@@ -1,11 +1,11 @@
 typedef enum {
+    INIT,
     STILL,
     MOVING,
     DOOR,
     EMERGENCY_STOP
 } State;
 
-State change_state;
 
 
-void state_machine();
+//void state_machine(State change_state);
