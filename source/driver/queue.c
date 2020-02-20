@@ -8,6 +8,7 @@ int inside_queue[HARDWARE_NUMBER_OF_FLOORS]={0};
 int up_queue[HARDWARE_NUMBER_OF_FLOORS]= {0};
 int down_queue[HARDWARE_NUMBER_OF_FLOORS]={0};
 
+
 int check_order_at_current_floor(){
     for(int i= 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
         if(hardware_read_floor_sensor(i) && (hardware_read_order(i, HARDWARE_ORDER_UP)||hardware_read_order(i,HARDWARE_ORDER_DOWN))){
@@ -19,7 +20,7 @@ int check_order_at_current_floor(){
 
 int any_order(){
     for(int i= 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
-        if(hardware_read_order(i,HARDWARE_ORDER_UP)){
+        if(hardware_read_order(i,HARDWARE_ORDER_UP)||hardware_read_order(i,HARDWARE_ORDER_DOWN)||hardware_read_order(i,HARDWARE_ORDER_INSIDE)){
         return 1;
         }
     }
@@ -62,3 +63,40 @@ void delete_all_orders(){
 	}
 }
 
+int last_floor(){
+    for (int i=0; i < HARDWARE_NUMBER_OF_FLOORS; i++) {
+		if (hardware_read_floor_sensor(i)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
+
+int check_and_return_floor_inside(){
+    for(int i= 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
+        if(inside_queue[i]){
+            return i;
+        }
+    }
+    return -1;
+}
+
+int check_and_return_floor_up(){
+    for(int i= 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
+        if(up_queue[i]){
+            return i;
+        }
+    }
+    return -1;
+}
+
+int check_and_return_floor_down(){
+    for(int i= 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
+        if(down_queue[i]){
+            return i;
+        }
+    }
+    return -1;
+}

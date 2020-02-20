@@ -46,5 +46,18 @@ void delete_order();
  */
 void delete_all_orders();
 
+/**
+ * @brief function to remember the last floor the elvator was in.
+ * @return returns a int with the last floor. 
+ */
+int last_floor();
 
+/**
+ * @brief function to check if there is any orders in a list. 
+ * @return returns the floor if it is requierd [0-3] and -1 if there is no requierments. 
+ */
+int check_and_return_floor_inside();
 
+int check_and_return_floor_up();
+
+int check_and_return_floor_down();

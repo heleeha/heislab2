@@ -14,6 +14,7 @@ static void sigint_handler(int sig){
     hardware_command_movement(HARDWARE_MOVEMENT_STOP);
     exit(0);
 }
+int lastfloor;
 
 int main(){
  
@@ -46,15 +47,17 @@ State change_state = INIT;
         for( int i = 0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
             if (hardware_read_floor_sensor(i)){
                 hardware_command_movement(HARDWARE_MOVEMENT_STOP); 
-                   change_state = STILL;
+                last_floor();
+                change_state = STILL;
             }
         }
         break;
-
+   
     case STILL:
         add_to_queue();
         set_floor_light();
         set_order_light_on();
+        last_floor();
         if(any_order()){
             change_state = MOVING;
         } 
@@ -68,23 +71,38 @@ State change_state = INIT;
         break;
 
     case MOVING:
+        if (last_floor() >= 0) {
+            lastfloor = last_floor();
+        }
         set_order_light_on();
         set_order_light_off();
         set_floor_light();
+        add_to_queue();
+        if(check_and_return_floor_inside()>= 0){
+           if(lastfloor < check_and_return_floor_inside()){
+               hardware_command_movement(HARDWARE_MOVEMENT_UP);
+           }
+           else if (lastfloor > check_and_return_floor_inside()){
+               hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+           }
+           else {
+               change_state = DOOR;
+           }
+        }
+        if(hardware_read_stop_signal()){
+            change_state = EMERGENCY_STOP;
+        }
 
+        break;
+/*
         if(hardware_read_floor_sensor(0)){
             hardware_command_movement(HARDWARE_MOVEMENT_UP);
         }
         
         if(hardware_read_floor_sensor(HARDWARE_NUMBER_OF_FLOORS - 1)){
             hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
-        }
+        }*/
 
-        if(hardware_read_stop_signal()){
-            change_state = EMERGENCY_STOP;
-        }
-
-        break;
     case DOOR:
         hardware_command_movement(HARDWARE_MOVEMENT_STOP);
         if(counting_3seconds()){
@@ -96,6 +114,7 @@ State change_state = INIT;
         change_state = STILL;
         }
     case EMERGENCY_STOP:
+        clear_all_order_lights();
         set_emergency_stop();
         delete_all_orders();
         set_stop_light();
@@ -105,52 +124,5 @@ State change_state = INIT;
     default:
         break;
     }
-}
-
-
-/*
-
-        if(hardware_read_stop_signal()){
-            hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-            break;
-        }
-        
-       
-
-        if(hardware_read_floor_sensor(0)){
-            hardware_command_movement(HARDWARE_MOVEMENT_UP);
-            set_start_time();
-
-        }
-        if(counting_3seconds()){
-            hardware_command_door_open(1);
-        }
-        else {
-        hardware_command_door_open(0);
-        }
-
-        if(hardware_read_floor_sensor(HARDWARE_NUMBER_OF_FLOORS - 1)){
-            hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
-        }
-
-
-
-        door_obstruction();
-        set_order_light_on();
-        set_order_light_off();
-        //set_floor_stop(1);
-        set_floor_light();
-        set_stop_light();
-        add_to_queue();
-        delete_order();
-        
-        for (int i= 0; i< 4; i++){
-            int floor =down_queue[i];
-            printf ("%d",floor);
-        }
-
-    }
-    */
-        
-    
+}           
 }
