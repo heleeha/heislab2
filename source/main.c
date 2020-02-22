@@ -16,12 +16,13 @@ static void sigint_handler(int sig){
 }
 
 static int lastfloor;
+static int lastMotorDirection;
 
 int main(){
  
 
     signal(SIGINT, sigint_handler);
-
+    
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
@@ -31,7 +32,8 @@ int main(){
             exit(1);
         }
 
-State change_state = INIT;
+    State change_state = INIT;
+    
     while(1){
 
         if(hardware_read_stop_signal()){
@@ -42,6 +44,7 @@ State change_state = INIT;
     {
     case INIT:
         hardware_command_movement(HARDWARE_MOVEMENT_UP);
+        lastMotorDirection =1;
 
         for( int i = 0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
             if (hardware_read_floor_sensor(i)){
@@ -70,22 +73,45 @@ State change_state = INIT;
         break;
 
     case MOVING:
-       update_last_floor(&lastfloor);
+        add_to_queue();
+        make_required_floors();
+        update_last_floor(&lastfloor);
         set_order_light_on();
         set_floor_light();
-        add_to_queue();
+        //print_req_floors();
+        
+
         if(check_and_return_floor_inside()>= 0){
-           if(lastfloor < check_and_return_floor_inside()){
+           if(lastfloor < required_floor(&lastfloor,&lastMotorDirection)){
                hardware_command_movement(HARDWARE_MOVEMENT_UP);
+               lastMotorDirection =1;
            }
-           else if (lastfloor > check_and_return_floor_inside()){
+        
+           else if ((lastfloor > required_floor(&lastfloor,&lastMotorDirection)) && (lastfloor>=0)){
                hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+               lastMotorDirection =0;
            }
-           else if(current_floor() == check_and_return_floor_inside()) {
+           else if(current_floor() == required_floor(&lastfloor,&lastMotorDirection)) {
                set_start_time();
                change_state = DOOR;
            }
         }
+
+        if(lastfloor < required_outside_floor(&lastfloor,&lastMotorDirection)){
+               hardware_command_movement(HARDWARE_MOVEMENT_UP);
+               lastMotorDirection =1;
+        }
+        
+        else if ((lastfloor > required_outside_floor(&lastfloor,&lastMotorDirection)) && (lastfloor>=0)){
+               hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+               lastMotorDirection =0;
+        }
+        else if(current_floor() == required_outside_floor(&lastfloor,&lastMotorDirection)) {
+               set_start_time();
+               change_state = DOOR;
+        }
+        
+
        
         if(hardware_read_stop_signal()){
             change_state = EMERGENCY_STOP;
@@ -94,7 +120,10 @@ State change_state = INIT;
         break;
 
     case DOOR:
+        
         delete_order();
+        delete_required_floors(&lastfloor);
+        
         set_order_light_off();
         set_order_light_on();
         add_to_queue();

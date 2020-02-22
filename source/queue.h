@@ -63,3 +63,12 @@ int check_and_return_floor_up();
 int check_and_return_floor_down();
 
 void update_last_floor(int* p_last_floor);
+
+void make_required_floors();
+
+void print_req_floors();
+
+void delete_required_floors(const int* p_last_floor);
+
+int required_floor(const int* p_last_floor, const int* p_lastMotorDirection);
+int required_outside_floor(const int* p_last_floor, const int* p_lastMotorDirection);

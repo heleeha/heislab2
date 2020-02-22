@@ -6,6 +6,7 @@
 int inside_queue[HARDWARE_NUMBER_OF_FLOORS]={0};
 int up_queue[HARDWARE_NUMBER_OF_FLOORS]= {0};
 int down_queue[HARDWARE_NUMBER_OF_FLOORS]={0};
+static int required_floors[HARDWARE_NUMBER_OF_FLOORS]={-1,-1,-1,-1};
 
 
 int check_order_at_current_floor(){
@@ -106,4 +107,99 @@ void update_last_floor( int* p_last_floor){
         *p_last_floor = floor;
     }
 }
+
+void make_required_floors(){
+    for(int i= 0; i < HARDWARE_NUMBER_OF_FLOORS; i++){
+        if(inside_queue[i]){
+            required_floors[i] =i;
+        }
+    }
+    
+}
+
+void delete_required_floors(const int* p_last_floor){
+    required_floors[*p_last_floor] =-1;
+}
+
+void print_req_floors(){
+    for(int i = 0; i< HARDWARE_NUMBER_OF_FLOORS; i++){
+        printf("%d", up_queue[i]);
+    }
+
+}
+
+
+
+
+int required_floor(const int* p_last_floor, const int* p_lastMotorDirection) {
+    if(*p_lastMotorDirection){
+        for(int i = 0;i < HARDWARE_NUMBER_OF_FLOORS;i++){
+            if(required_floors[i]>=*p_last_floor){
+                for(int j =0; j<HARDWARE_NUMBER_OF_FLOORS; j++){
+                    //if ((j>*p_last_floor)&&(j<required_floors[i])){
+                        if(up_queue[j]){
+                            return j;
+                            }
+                        //}
+                    }
+                    
+                return required_floors[i];
+            }
+        }
+    }
+        for(int i = HARDWARE_NUMBER_OF_FLOORS-1;i >=0 ;i--){
+            if((required_floors[i]<=*p_last_floor) && (required_floors[i]>=0)){
+                return required_floors[i];
+            }
+        }
+    
+
+    if(!*p_lastMotorDirection){
+        for(int i = HARDWARE_NUMBER_OF_FLOORS-1;i >=0 ;i--){
+            if((required_floors[i]<=*p_last_floor) && (required_floors[i]>=0)){
+                for(int j =HARDWARE_NUMBER_OF_FLOORS-1; j>=0; j--){
+                    //if ((j>*p_last_floor)&&(j<required_floors[i])){
+                        if(down_queue[j]){
+                            return j;
+                            }
+                        //}
+                    }
+                return required_floors[i];
+            }
+        }
+        
+        for(int i = 0;i < HARDWARE_NUMBER_OF_FLOORS;i++){
+            if(required_floors[i]>=*p_last_floor){
+            return required_floors[i];
+            }
+        }
+            
+        
+        
+    }
+    return -2;
+}
+
+
+int required_outside_floor(const int* p_last_floor, const int* p_lastMotorDirection){
+    if (check_and_return_floor_inside()==-1){
+        int diff = 10;
+        int closest = 10;
+        for(int i = 0;i < HARDWARE_NUMBER_OF_FLOORS;i++){
+            if(up_queue[i]){
+                if((up_queue[i]-*p_last_floor)<diff){
+                    diff = *p_last_floor-up_queue[i];
+                    closest = i;
+                }
+
+            }
+
+        }
+        if (closest < 10){
+            return closest;
+        }
+    }
+    return -2;
+}
+
 
