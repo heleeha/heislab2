@@ -66,7 +66,7 @@ int main(){
                 lastMotorDirection = 0;
                 change_state = MOVING;
             }
-            if(lastMotorDirection == 0){
+            else if(lastMotorDirection == 0){
                 hardware_command_movement(HARDWARE_ORDER_UP);
                 lastMotorDirection = 1;
                 change_state = MOVING;
@@ -122,15 +122,19 @@ int main(){
             }
         
             if(!check_order_above(&lastfloor)){
-                set_start_time();
-             change_state = DOOR;
+                if(current_floor()>=0){
+                    set_start_time();
+                    change_state = DOOR;
+                }
             }
             
         }
         else if(!lastMotorDirection){
             if(down_button_at_current_floor()){
-                set_start_time();
-                change_state = DOOR;
+                if(current_floor()>=0){
+                    set_start_time();
+                    change_state = DOOR;
+                }
             }
             if(!check_order_below(&lastfloor)){
                 set_start_time();
