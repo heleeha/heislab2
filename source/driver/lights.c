@@ -47,6 +47,12 @@ void set_stop_light(){
 	}
 }
 
+void clear_stop_light(){
+	if(!hardware_read_stop_signal()){
+		hardware_command_stop_light(0);
+	}
+}
+
 void clear_all_order_lights(){
 	for (int i=0; i < HARDWARE_NUMBER_OF_FLOORS; i++) {
 		hardware_command_order_light(i, HARDWARE_ORDER_UP, 0);

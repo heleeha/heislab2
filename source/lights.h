@@ -32,3 +32,8 @@ void set_order_light_off();
  * @brief turns off all order lights
  */
  void clear_all_order_lights();
+
+/**
+ * @brief turns off all order lights
+ */
+ void clear_stop_light();
