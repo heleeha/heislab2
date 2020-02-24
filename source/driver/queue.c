@@ -214,33 +214,7 @@ int check_order_below(const int* p_last_floor){
     return 0;
 }
 
-/*
-int check_order_above(){
-    for(int i = 0; i< HARDWARE_NUMBER_OF_FLOORS; i++){
-        if( up_queue[i] || down_queue[i] || inside_queue[i]){
-            if(current_floor()>=0){
-                if (i>current_floor()){
-                    return 1;
-                }
-            }
-        }
-    }
-        return 0;
-}
 
-int check_order_below(){
-    for(int i = 0; i< HARDWARE_NUMBER_OF_FLOORS; i++){
-        if( up_queue[i] || down_queue[i] || inside_queue[i]){
-            if(current_floor()>=0){
-                if (i<current_floor()){
-                    return 1;
-                }
-            }
-        }
-    }
-        return 0;
-}
-*/
 
 int up_button_at_current_floor(){
     if (current_floor()>=0){
@@ -269,46 +243,3 @@ int cab_button_at_current_floor(){
     return 0;
 }
 
-/*int correct_floor(const int* p_lastMotorDirection, const int* p_last_floor){
-    if(cab_button_at_current_floor()){
-        return 1;
-    }
-    if(&p_lastMotorDirection){
-        if(up_button_at_current_floor()){
-            return 1;
-        }
-        if(!check_order_above(&p_last_floor)){
-            return 1;
-        }
-    }
-    if(!&p_lastMotorDirection){
-        if(down_button_at_current_floor()){
-            return 1;
-        }
-        if(!check_order_below(&p_last_floor)){
-            return 1;
-        }
-    }
-    return 0;
-
-}*/
-/*
-int give_motordirection(const int* p_lastMotorDirection, const int* p_last_floor){
-    if (*p_lastMotorDirection){
-        if(check_order_above(*p_last_floor)){
-            return 1;
-        }
-        else if (check_order_below(*p_last_floor)){
-            return -1;
-        }
-    }
-    if (!*p_lastMotorDirection){
-        if(check_order_below(*p_last_floor)){
-            return -1;
-        }
-        else if(check_order_above(*p_last_floor)){
-            return 1;
-        }
-    }
-    return 0;
-}*/

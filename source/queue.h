@@ -80,6 +80,4 @@ int check_order_below();
 int up_button_at_current_floor();
 int down_button_at_current_floor();
 int cab_button_at_current_floor();
-//int correct_floor(const int* p_lastMotorDirection,const int* p_last_floor);
-//int give_motordirection(const int* p_lastMotorDirection,const int* p_last_floor);
 int order_at_last_floor(int *p_last_floor);

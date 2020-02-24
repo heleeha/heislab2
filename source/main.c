@@ -3,7 +3,6 @@
 #include <signal.h>
 #include "hardware.h"
 #include "lights.h"
-#include "door.h"
 #include "stop.h"
 #include "queue.h"
 #include "fsm.h"
@@ -14,11 +13,10 @@ static void sigint_handler(int sig){
     hardware_command_movement(HARDWARE_MOVEMENT_STOP);
     exit(0);
 }
-int c;
+
 static int lastfloor;
 static int lastMotorDirection;
-int a;
-int b;
+
 int main(){
  
 
@@ -41,12 +39,12 @@ int main(){
     switch (change_state)
     {
     case INIT:
-        hardware_command_movement(HARDWARE_MOVEMENT_UP);
+        move_up();
         lastMotorDirection =1;
 
         for( int i = 0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
             if (hardware_read_floor_sensor(i)){
-                hardware_command_movement(HARDWARE_MOVEMENT_STOP); 
+                move_stop(); 
                 current_floor();
                 change_state = STILL;
             }
@@ -62,25 +60,30 @@ int main(){
       
         if((current_floor()==-1) && (order_at_last_floor(&lastfloor))){
             if(lastMotorDirection == 1){
-                hardware_command_movement(HARDWARE_ORDER_DOWN);
-                lastMotorDirection = 0;
-                change_state = MOVING;
+                move_down();
+                if (current_floor()==lastfloor){
+                    set_start_time();
+                    change_state = DOOR;
+                }
             }
             else if(lastMotorDirection == 0){
-                hardware_command_movement(HARDWARE_ORDER_UP);
-                lastMotorDirection = 1;
-                change_state = MOVING;
+                move_up();
+                if (current_floor()==lastfloor){
+                    set_start_time();
+                    change_state = DOOR;
+                }
             }
         }
         else if(order_in_queues()){
             change_state = MOVING;
         } 
-        else if(hardware_read_stop_signal()){
-            change_state = EMERGENCY_STOP;
-        }
+        
         else if(check_order_at_current_floor()){
             set_start_time();
             change_state = DOOR;
+        }
+        if(hardware_read_stop_signal()){
+            change_state = EMERGENCY_STOP;
         }
         break;
 
@@ -93,21 +96,21 @@ int main(){
         
         if (lastMotorDirection){
             if(check_order_above(&lastfloor)){
-                hardware_command_movement(HARDWARE_MOVEMENT_UP);
+                move_up();
                 lastMotorDirection = 1; 
             }
             else if (check_order_below(&lastfloor)){
-                hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+                move_down();
                 lastMotorDirection = 0;
             }
         }
-        if (!lastMotorDirection){
+        else if (!lastMotorDirection){
             if(check_order_below(&lastfloor)){
-                hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+                move_down();
                 lastMotorDirection = 0;
             }
             else if(check_order_above(&lastfloor)){
-                hardware_command_movement(HARDWARE_MOVEMENT_UP);
+                move_up();
                 lastMotorDirection = 1;
             }
         }
@@ -121,13 +124,12 @@ int main(){
                 change_state= DOOR;
             }
         
-            if(!check_order_above(&lastfloor)){
+            else if(!check_order_above(&lastfloor)){
                 if(current_floor()>=0){
                     set_start_time();
                     change_state = DOOR;
                 }
-            }
-            
+            } 
         }
         else if(!lastMotorDirection){
             if(down_button_at_current_floor()){
@@ -136,7 +138,7 @@ int main(){
                     change_state = DOOR;
                 }
             }
-            if(!check_order_below(&lastfloor)){
+            else if(!check_order_below(&lastfloor)){
                 set_start_time();
                 change_state = DOOR; 
             }
@@ -156,7 +158,7 @@ int main(){
         set_order_light_off();
         set_order_light_on();
         add_to_queue();
-        hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+        move_stop();
         if(hardware_read_stop_signal()){
             change_state = EMERGENCY_STOP;
         }

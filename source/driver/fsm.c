@@ -3,7 +3,6 @@
 #include <signal.h>
 #include "hardware.h"
 #include "lights.h"
-#include "door.h"
 #include "stop.h"
 #include "queue.h"
 #include "fsm.h"
