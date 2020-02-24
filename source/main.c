@@ -14,7 +14,7 @@ static void sigint_handler(int sig){
     hardware_command_movement(HARDWARE_MOVEMENT_STOP);
     exit(0);
 }
-
+int c;
 static int lastfloor;
 static int lastMotorDirection;
 int a;
