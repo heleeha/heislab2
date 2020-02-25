@@ -114,12 +114,12 @@ int main(){
                 lastMotorDirection = 1;
             }
         }
-        if(cab_button_at_current_floor()){
+        if(cab_button_at_current_floor(&lastfloor)){
             set_start_time();
             change_state = DOOR;
         }
         else if(lastMotorDirection){
-            if(up_button_at_current_floor()){
+            if(up_button_at_current_floor(&lastfloor)){
                 set_start_time();
                 change_state= DOOR;
             }
@@ -132,7 +132,7 @@ int main(){
             } 
         }
         else if(!lastMotorDirection){
-            if(down_button_at_current_floor()){
+            if(down_button_at_current_floor(&lastfloor)){
                 if(current_floor()>=0){
                     set_start_time();
                     change_state = DOOR;
@@ -152,7 +152,7 @@ int main(){
         break;
 
     case DOOR:
-        delete_order();
+        delete_order(lastfloor);
         delete_required_floors(&lastfloor);
         
         set_order_light_off();

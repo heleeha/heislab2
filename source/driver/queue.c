@@ -57,14 +57,10 @@ void add_to_queue(){
     
 }
 
-void delete_order(){
-	for (int i=0; i < HARDWARE_NUMBER_OF_FLOORS; i++) {
-		if (hardware_read_floor_sensor(i)) {
-			up_queue[i] =0;
-            down_queue[i]=0;
-            inside_queue[i]=0;
-		}
-	}
+void delete_order(int last_floor){
+	up_queue[last_floor] =0;
+    down_queue[last_floor]=0;
+    inside_queue[last_floor]=0;
 }
 
 void delete_all_orders(){
@@ -216,27 +212,33 @@ int check_order_below(const int* p_last_floor){
 
 
 
-int up_button_at_current_floor(){
-    if (current_floor()>=0){
-        if(up_queue[current_floor()]){
+int up_button_at_current_floor(int *p_last_floor){
+    int floor = current_floor();
+    if (floor>=0){
+        if(up_queue[floor]){
+            *p_last_floor = floor;
             return 1;
         }
     }
     return 0;
 }
 
-int down_button_at_current_floor(){
-    if (current_floor() >= 0){
-        if(down_queue[current_floor()]){
+int down_button_at_current_floor(int *p_last_floor){
+    int floor = current_floor();
+    if (floor >= 0){
+        if(down_queue[floor]){
+            *p_last_floor = floor;
             return 1;
         }
     }
     return 0;
 }
 
-int cab_button_at_current_floor(){
-    if(current_floor()>= 0){
-        if(inside_queue[current_floor()]){
+int cab_button_at_current_floor(int *p_last_floor){
+    int floor = current_floor();
+    if(floor>= 0){
+        if(inside_queue[floor]){
+            *p_last_floor = floor;
             return 1;
         }
     }
