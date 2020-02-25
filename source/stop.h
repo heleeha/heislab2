@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Module for holding the door.
+ * @brief Module for timer, stop and motor direction.
  *
  *
  * Pauline M. Jonassen & Helene E. Haugen
@@ -8,23 +8,24 @@
 #include <time.h>
 
 /**
- * @brief check is begin is grater then 2.
- * @return 0 if @p diff_sec is bigger then 2 and otherwise returns 1.
+ * @brief checks if begin is grater than 2.
+ * @return 0 if @p diff_sec is bigger than 2 and otherwise returns 1.
  */
 int counting_3seconds();
+
 /**
  * @brief returns the starttime. 
  * @return starttime which is a clock_t.
  */
 clock_t get_start_time();
+
 /**
  * @brief sets @p start to the current clocktime.
  */
 void set_start_time();
 
-
 /**
- * @brief Checks if the stopbutton is pushed, if so stop the elevator.
+ * @brief Checks if the stopbutton is pushed, if so stops the elevator.
  */
 void set_emergency_stop();
 

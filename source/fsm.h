@@ -14,10 +14,9 @@ typedef enum {
     STILL,
     MOVING,
     DOOR,
-    EMERGENCY_STOP
+    EMERGENCY_STOP,
+    EMERGENCY_STOP_BETWEEN_FLOORS
 } State;
-
-//static void sigint_handler(int sig);
 
 /**
  * @brief A while loop containing a switch with all the states.

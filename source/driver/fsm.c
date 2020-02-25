@@ -7,19 +7,12 @@
 #include "queue.h"
 #include "fsm.h"
 
-/*static void sigint_handler(int sig){
-    (void)(sig);
-    printf("Terminating elevator\n");
-    hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-    exit(0);
-}*/
-
 static int lastfloor;
 static int lastMotorDirection;
 
 void state_machine(State change_state) {
     while(1){
-    //signal(SIGINT, sigint_handler);
+    
     switch (change_state)
     {
     case INIT:
@@ -40,30 +33,12 @@ void state_machine(State change_state) {
         add_to_queue();
         set_floor_light();
         set_order_light_on();
-        current_floor();
         update_last_floor(&lastfloor);
         
         if(hardware_read_stop_signal()){
             change_state = EMERGENCY_STOP;
         }
 
-      
-        if((current_floor()==-1) && (order_at_last_floor(lastfloor))){
-            if(lastMotorDirection == 1){
-                move_down();
-                if (current_floor()==lastfloor){
-                    set_start_time();
-                    change_state = DOOR;
-                }
-            }
-            else if(lastMotorDirection == 0){
-                move_up();
-                if (current_floor()==lastfloor){
-                    set_start_time();
-                    change_state = DOOR;
-                }
-            }
-        }
         else if(order_in_queues()){
             change_state = MOVING;
         } 
@@ -108,10 +83,10 @@ void state_machine(State change_state) {
                 lastMotorDirection = 1;
             }
         }
-
-        
         
         update_last_floor(&lastfloor);
+
+
         if(cab_button_at_current_floor(&lastfloor)){
             set_start_time();
             change_state = DOOR;
@@ -192,11 +167,47 @@ void state_machine(State change_state) {
             set_start_time();
             change_state = DOOR;
         }
+        else if(current_floor()==-1){
+            clear_stop_light();
+            change_state = EMERGENCY_STOP_BETWEEN_FLOORS;
+        }
         else{
             clear_stop_light();
             change_state = STILL;
         }
         break;
+
+    case EMERGENCY_STOP_BETWEEN_FLOORS:
+        add_to_queue();
+        set_order_light_on();
+        update_last_floor(&lastfloor);
+
+        if(hardware_read_stop_signal()){
+            change_state = EMERGENCY_STOP;
+        }
+        if(order_at_last_floor(lastfloor)){
+            if(lastMotorDirection == 1){
+                move_down();
+                if (current_floor()==lastfloor){
+                    set_start_time();
+                    change_state = DOOR;
+                }
+            }
+            else if(lastMotorDirection == 0){
+                move_up();
+                if (current_floor()==lastfloor){
+                    set_start_time();
+                    change_state = DOOR;
+                }
+            }
+        }
+
+        if ((order_in_queues()) && (!order_at_last_floor(lastfloor))){
+            change_state = STILL;
+        }
+        
+        break;
+
 
     default:
         break;
