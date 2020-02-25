@@ -39,6 +39,7 @@ int main(){
     switch (change_state)
     {
     case INIT:
+        clear_all_order_lights();
         move_up();
         lastMotorDirection =1;
 
