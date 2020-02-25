@@ -56,28 +56,13 @@ int current_floor();
  * @brief function to check if there is any orders in a list. 
  * @return returns the floor if it is requierd [0-3] and -1 if there is no requierments. 
  */
-int check_and_return_floor_inside();
-
-int check_and_return_floor_up();
-
-int check_and_return_floor_down();
 
 void update_last_floor(int* p_last_floor);
 
-void make_required_floors();
 
-void print_req_floors();
-
-void delete_required_floors(const int* p_last_floor);
-
-int required_floor(const int* p_last_floor, const int* p_lastMotorDirection);
-
-
-
-
-int check_order_above();
-int check_order_below();
+int check_order_above(int last_floor);
+int check_order_below(int last_floor);
 int up_button_at_current_floor(int *p_last_floor);
 int down_button_at_current_floor(int *p_last_floor);
 int cab_button_at_current_floor(int *p_last_floor);
-int order_at_last_floor(int *p_last_floor);
+int order_at_last_floor(int last_floor);
