@@ -20,12 +20,10 @@ void state_machine(State change_state) {
         move_up();
         lastMotorDirection =1;
 
-        for( int i = 0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
-            if (hardware_read_floor_sensor(i)){
+        if (current_floor()>=0){
                 move_stop(); 
-                current_floor();
                 change_state = STILL;
-            }
+            
         }
         break;
    
@@ -35,7 +33,7 @@ void state_machine(State change_state) {
         set_order_light_on();
         update_last_floor(&lastfloor);
         
-        if(hardware_read_stop_signal()){
+        if(read_emergency_stop()){
             change_state = EMERGENCY_STOP;
         }
 
@@ -47,7 +45,7 @@ void state_machine(State change_state) {
             set_start_time();
             change_state = DOOR;
         }
-        if(hardware_read_stop_signal()){
+        if(read_emergency_stop()){
             change_state = EMERGENCY_STOP;
         }
         break;
@@ -58,7 +56,7 @@ void state_machine(State change_state) {
         set_order_light_on();
         set_floor_light();
         
-        if(hardware_read_stop_signal()){
+        if(read_emergency_stop()){
             change_state = EMERGENCY_STOP;
         }
         
@@ -120,7 +118,7 @@ void state_machine(State change_state) {
 
         
         
-        if(hardware_read_stop_signal()){
+        if(read_emergency_stop()){
             change_state = EMERGENCY_STOP;
         }
 
@@ -133,27 +131,27 @@ void state_machine(State change_state) {
         set_order_light_on();
         add_to_queue();
         move_stop();
-        if(hardware_read_stop_signal()){
+        if(read_emergency_stop()){
             change_state = EMERGENCY_STOP;
         }
         if(counting_3seconds()){
-            hardware_command_door_open(1);
-            if (hardware_read_obstruction_signal()) {
-                hardware_command_door_open(1);
+            open_door();
+            if (read_obstruction()){
+                open_door();
                 set_start_time();
                 change_state = DOOR;
             }
         }
         
         else {
-        hardware_command_door_open(0);
+        close_door();
         change_state = STILL;
         }
         break;
 
     case EMERGENCY_STOP:
         clear_all_order_lights();
-        set_emergency_stop();
+        move_stop();
         delete_all_orders();
         set_stop_light();
         if(current_floor()>= 0){

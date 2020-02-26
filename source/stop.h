@@ -27,7 +27,7 @@ void set_start_time();
 /**
  * @brief Checks if the stopbutton is pushed, if so stops the elevator.
  */
-void set_emergency_stop();
+int read_emergency_stop();
 
 /**
  * @brief makes the elevator move up.
@@ -43,3 +43,10 @@ void move_down();
  * @brief makes the elevator stop.
  */
 void move_stop();
+
+
+int read_obstruction();
+
+void open_door();
+
+void close_door();

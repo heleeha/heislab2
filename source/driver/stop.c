@@ -28,11 +28,11 @@ int counting_3seconds(){
 
 } 
 
-void set_emergency_stop(){
+int read_emergency_stop(){
 	if(hardware_read_stop_signal()){
-            hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-			
-	}	
+            return 1;		
+	}
+    return 0;	
 	
 }
 
@@ -46,4 +46,19 @@ void move_down(){
 
 void move_stop(){
 	hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+}
+
+int read_obstruction(){
+    if(hardware_read_obstruction_signal()){
+        return 1;
+    }
+    return 0;
+}
+
+void open_door(){
+    hardware_command_door_open(1);
+}
+
+void close_door(){
+    hardware_command_door_open(0);
 }
