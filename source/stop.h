@@ -44,9 +44,18 @@ void move_down();
  */
 void move_stop();
 
-
+/**
+ * @brief checks if the obstruction switch is active.
+ * @return 1 if it is active or 0 if not.
+ */
 int read_obstruction();
 
+/**
+ * @brief opens the door.
+ */
 void open_door();
 
+/**
+ * @brief closes the door.
+ */
 void close_door();

@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <signal.h>
-#include "hardware.h"
 #include "lights.h"
 #include "stop.h"
 #include "queue.h"
@@ -17,14 +15,17 @@ void state_machine(State change_state) {
     {
     case INIT:
         clear_all_order_lights();
-        move_up();
-        lastMotorDirection =1;
-
+        
         if (current_floor()>=0){
                 move_stop(); 
                 change_state = STILL;
-            
         }
+        else{
+            move_up();
+            lastMotorDirection =1;
+        }
+        
+       
         break;
    
     case STILL:
@@ -52,7 +53,6 @@ void state_machine(State change_state) {
 
     case MOVING:
         add_to_queue();
-        
         set_order_light_on();
         set_floor_light();
         
@@ -83,7 +83,6 @@ void state_machine(State change_state) {
         }
         
         update_last_floor(&lastfloor);
-
 
         if(cab_button_at_current_floor(&lastfloor)){
             set_start_time();
@@ -126,7 +125,7 @@ void state_machine(State change_state) {
 
     case DOOR:
         delete_order(lastfloor);
-        
+        set_floor_light();
         set_order_light_off();
         set_order_light_on();
         add_to_queue();
@@ -155,9 +154,9 @@ void state_machine(State change_state) {
         delete_all_orders();
         set_stop_light();
         if(current_floor()>= 0){
-            hardware_command_door_open(1);
+            open_door();
         }
-        if(hardware_read_stop_signal()){
+        if(read_emergency_stop()){
             change_state = EMERGENCY_STOP; 
         }
         else if(current_floor()>= 0){
@@ -180,7 +179,7 @@ void state_machine(State change_state) {
         set_order_light_on();
         update_last_floor(&lastfloor);
 
-        if(hardware_read_stop_signal()){
+        if(read_emergency_stop()){
             change_state = EMERGENCY_STOP;
         }
         if(order_at_last_floor(lastfloor)){

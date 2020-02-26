@@ -7,22 +7,6 @@
  * Pauline M. Jonassen & Helene E. Haugen
  */
 
-
-/**
- * @brief Array for inside queue, with @p HARDWARE_NUMBER_OF_FLOORS elements.
- */
-int inside_queue[HARDWARE_NUMBER_OF_FLOORS];
-
-/**
- * @brief Array for down queue, with @p HARDWARE_NUMBER_OF_FLOORS elements.
- */
-int down_queue[HARDWARE_NUMBER_OF_FLOORS];
-
-/**
- * @brief Array for the up queue with @p HARDWARE_NUMBER_OF_FLOORS elements.
- */
-int up_queue[HARDWARE_NUMBER_OF_FLOORS];
-
 /**
  * @brief checking if there are any orders at current floor.
  * @return 1 if there are orders at current floor, return 0 otherwise.
