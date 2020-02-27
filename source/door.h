@@ -1,10 +1,13 @@
 /**
  * @file
- * @brief Module for timer, stop and motor direction.
+ * @brief Module for timer and door.
  *
  *
  * Pauline M. Jonassen & Helene E. Haugen
  */
+#ifndef DOOR_H
+#define DOOR_H
+
 #include <time.h>
 
 /**
@@ -14,35 +17,16 @@
 int counting_3seconds();
 
 /**
- * @brief returns the starttime. 
- * @return starttime which is a clock_t.
+ * @brief local function returns the starttime. 
+ * @return start time which is a clock_t.
  */
 clock_t get_start_time();
 
 /**
  * @brief sets @p start to the current clocktime.
+ * @param[out] start.
  */
 void set_start_time();
-
-/**
- * @brief Checks if the stopbutton is pushed, if so stops the elevator.
- */
-int read_emergency_stop();
-
-/**
- * @brief makes the elevator move up.
- */
-void move_up();
-
-/**
- * @brief makes the elevator move down.
- */
-void move_down();
-
-/**
- * @brief makes the elevator stop.
- */
-void move_stop();
 
 /**
  * @brief checks if the obstruction switch is active.
@@ -59,3 +43,5 @@ void open_door();
  * @brief closes the door.
  */
 void close_door();
+
+#endif

@@ -5,7 +5,8 @@
  *
  * Pauline M. Jonassen & Helene E. Haugen
  */
-
+#ifndef LIGHTS_H
+#define LIGHTS_H
 
 
 /**
@@ -37,3 +38,5 @@ void set_order_light_off();
  * @brief turns off the stop light.
  */
  void clear_stop_light();
+
+ #endif

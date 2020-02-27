@@ -1,7 +1,15 @@
+/**
+ * @file
+ * @brief Module for state machine.
+ *
+ *
+ * Pauline M. Jonassen & Helene E. Haugen
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include "lights.h"
-#include "stop.h"
+#include "door.h"
+#include "engine.h"
 #include "queue.h"
 #include "fsm.h"
 
@@ -18,7 +26,7 @@ void state_machine(State change_state) {
         
         if (current_floor()>=0){
                 move_stop(); 
-                change_state = STILL;
+                change_state = IDLE;
         }
         else{
             move_up();
@@ -28,7 +36,7 @@ void state_machine(State change_state) {
        
         break;
    
-    case STILL:
+    case IDLE:
         add_to_queue();
         set_floor_light();
         set_order_light_on();
@@ -144,7 +152,7 @@ void state_machine(State change_state) {
         
         else {
         close_door();
-        change_state = STILL;
+        change_state = IDLE;
         }
         break;
 
@@ -166,15 +174,15 @@ void state_machine(State change_state) {
         }
         else if(current_floor()==-1){
             clear_stop_light();
-            change_state = EMERGENCY_STOP_BETWEEN_FLOORS;
+            change_state = AFTER_STOP_BETWEEN_FLOORS;
         }
         else{
             clear_stop_light();
-            change_state = STILL;
+            change_state = IDLE;
         }
         break;
 
-    case EMERGENCY_STOP_BETWEEN_FLOORS:
+    case AFTER_STOP_BETWEEN_FLOORS:
         add_to_queue();
         set_order_light_on();
         update_last_floor(&lastfloor);
@@ -200,7 +208,7 @@ void state_machine(State change_state) {
         }
 
         if ((order_in_queues()) && (!order_at_last_floor(lastfloor))){
-            change_state = STILL;
+            change_state = IDLE;
         }
         
         break;

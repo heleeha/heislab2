@@ -1,7 +1,14 @@
+/**
+ * @file
+ * @brief Module for timer and door.
+ *
+ *
+ * Pauline M. Jonassen & Helene E. Haugen
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include "hardware.h"
-#include "stop.h"
+#include "door.h"
 #include <time.h>
 
 clock_t start;
@@ -27,26 +34,6 @@ int counting_3seconds(){
    return 1;
 
 } 
-
-int read_emergency_stop(){
-	if(hardware_read_stop_signal()){
-            return 1;		
-	}
-    return 0;	
-	
-}
-
-void move_up(){
-	hardware_command_movement(HARDWARE_MOVEMENT_UP);
-}
-
-void move_down(){
-	hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
-}
-
-void move_stop(){
-	hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-}
 
 int read_obstruction(){
     if(hardware_read_obstruction_signal()){

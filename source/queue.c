@@ -1,3 +1,11 @@
+/**
+ * @file
+ * @brief Module for queue.
+ *
+ *
+ * Pauline M. Jonassen & Helene E. Haugen
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "hardware.h"

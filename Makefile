@@ -1,4 +1,4 @@
-SOURCES := main.c lights.c stop.c queue.c fsm.c
+SOURCES := main.c lights.c door.c engine.c queue.c fsm.c
 
 SOURCE_DIR := source
 BUILD_DIR := build

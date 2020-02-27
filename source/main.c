@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @brief Module for main.
+ *
+ *
+ * Pauline M. Jonassen & Helene E. Haugen
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
